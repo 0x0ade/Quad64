@@ -167,7 +167,7 @@ namespace Quad64
 			bgColor = Color.CornflowerBlue;
 			camera.setLevel(level);
 			updateAreaButtons();
-			glControl1.Invalidate();
+			// glControl1.Invalidate();
 		}
 
 		private void refreshObjectsInList()
@@ -297,7 +297,7 @@ namespace Quad64
 				if (camera.isOrbitCamera())
 				{
 					camera.updateOrbitCamera(ref camMtx);
-					glControl1.Invalidate();
+					// glControl1.Invalidate();
 				}
 			}
 			Color pickedColor = Color.FromArgb(pixel[0], pixel[1], pixel[2]);
@@ -317,7 +317,7 @@ namespace Quad64
 			if (e.button == 3)
 			{
 				selectObject(e.x, e.y);
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 		}
 
@@ -351,7 +351,7 @@ namespace Quad64
 					moveState = true;
 					camera.updateCameraOffsetWithMouse(savedCamPos, e.x, e.y, glControl1.Width, glControl1.Height, ref camMtx);
 				}
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 		}
 
@@ -360,7 +360,7 @@ namespace Quad64
 			camera.resetMouseStuff();
 			camera.updateCameraMatrixWithScrollWheel((int) (e.y * 120 * 1.5f), ref camMtx);
 			savedCamPos = camera.Position;
-			glControl1.Invalidate();
+			// glControl1.Invalidate();
 		}
 
 		private void glControl1_KeyUp(SDL.SDL_KeyboardEvent e)
@@ -397,10 +397,12 @@ namespace Quad64
 
 		private void glControl1_Resize(object sender, EventArgs e)
 		{
+			/*
 			SDL.SDL_SetWindowSize(gameWindow, glControl1.Width, glControl1.Height);
 			GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
-			glControl1.Invalidate();
+			*/
+			// glControl1.Invalidate();
 		}
 
 		private void loadROMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -435,9 +437,9 @@ namespace Quad64
 		{
 			SettingsForm settings = new SettingsForm();
 			settings.ShowDialog();
-			glControl1.Invalidate();
+			// glControl1.Invalidate();
 			propertyGrid1.Refresh();
-			glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
+			// glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
 		}
 
 		private void objectComboPresetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -511,9 +513,9 @@ namespace Quad64
 						break;
 					}
 			}
-			glControl1.Invalidate();
+			// glControl1.Invalidate();
 			propertyGrid1.Refresh();
-			glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
+			// glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
 		}
 
 		private void Form1_Shown(object sender, EventArgs e)
@@ -559,7 +561,7 @@ namespace Quad64
 			{
 				level.CurrentAreaID = toArea;
 				refreshObjectsInList();
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 		}
 
@@ -648,7 +650,7 @@ namespace Quad64
 					level.CurrentAreaID = level.Areas[0].AreaID;
 					resetObjectVariables();
 					refreshObjectsInList();
-					glControl1.Invalidate();
+					// glControl1.Invalidate();
 					updateAreaButtons();
 				}
 				else
@@ -695,7 +697,7 @@ namespace Quad64
 					if (camera.isOrbitCamera())
 					{
 						camera.updateOrbitCamera(ref camMtx);
-						glControl1.Invalidate();
+						// glControl1.Invalidate();
 					}
 					//int addr = level.getCurrentArea().Objects[node.Index].getROMAddress();
 					//ROM.Instance.printROMSection(addr, addr + 0x18);
@@ -708,7 +710,7 @@ namespace Quad64
 					if (camera.isOrbitCamera())
 					{
 						camera.updateOrbitCamera(ref camMtx);
-						glControl1.Invalidate();
+						// glControl1.Invalidate();
 					}
 					//int addr = level.getCurrentArea().MacroObjects[node.Index].getROMAddress();
 					//ROM.Instance.printROMSection(addr, addr + 10);
@@ -721,7 +723,7 @@ namespace Quad64
 					if (camera.isOrbitCamera())
 					{
 						camera.updateOrbitCamera(ref camMtx);
-						glControl1.Invalidate();
+						// glControl1.Invalidate();
 					}
 					//int addr = level.getCurrentArea().SpecialObjects[node.Index].getROMAddress();
 					//ROM.Instance.printROMSection(addr, addr + 12);
@@ -749,8 +751,8 @@ namespace Quad64
 				propertyGrid1.Refresh();
 			}
 
-			glControl1.Invalidate();
-			glControl1.Update();
+			// glControl1.Invalidate();
+			// glControl1.Update();
 		}
 
 		private void trackBar1_ValueChanged(object sender, EventArgs e)
@@ -760,7 +762,7 @@ namespace Quad64
 			if (FOV < 0.1f)
 				FOV = 0.1f;
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
-			glControl1.Invalidate();
+			// glControl1.Invalidate();
 		}
 
 		private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
@@ -784,7 +786,7 @@ namespace Quad64
 				obj.updateROMData();
 				if (camera.isOrbitCamera())
 					camera.updateOrbitCamera(ref camMtx);
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 			else if (Globals.list_selected == 3)
 			{
@@ -842,7 +844,7 @@ namespace Quad64
 			{
 				camera.setCameraMode(CameraMode.Orbit, ref camMtx);
 				camera.updateMatrix(ref camMtx);
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 		}
 
@@ -852,7 +854,7 @@ namespace Quad64
 			{
 				camera.setCameraMode(CameraMode.Fly, ref camMtx);
 				camera.updateMatrix(ref camMtx);
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 		}
 
@@ -886,7 +888,7 @@ namespace Quad64
 				camera.updateCameraMatrixWithScrollWheel((e.Y - moveCam_InOut_lastPosY) * -10, ref camMtx);
 				savedCamPos = camera.Position;
 				moveCam_InOut_lastPosY = e.Y;
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 		}
 
@@ -907,7 +909,7 @@ namespace Quad64
 			if (moveCam_strafe_mouseDown)
 			{
 				camera.updateCameraOffsetWithMouse(savedCamPos, e.X, e.Y, glControl1.Width, glControl1.Height, ref camMtx);
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 			}
 		}
 
@@ -1010,9 +1012,9 @@ namespace Quad64
 						dropObjectToGround();
 					if (camera.isOrbitCamera())
 						camera.updateOrbitCamera(ref camMtx);
-					glControl1.Invalidate();
+					// glControl1.Invalidate();
 					propertyGrid1.Refresh();
-					glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
+					// glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
 					Globals.needToSave = true;
 				}
 			}
@@ -1047,9 +1049,9 @@ namespace Quad64
 					obj.yPos -= (short) (30 * (e.Y - moveObj_UpDown_lastMouseY) * Globals.objSpeedMultiplier);
 					if (camera.isOrbitCamera())
 						camera.updateOrbitCamera(ref camMtx);
-					glControl1.Invalidate();
+					// glControl1.Invalidate();
 					propertyGrid1.Refresh();
-					glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
+					// glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
 					moveObj_UpDown_lastMouseY = e.Y;
 					Globals.needToSave = true;
 				}
@@ -1116,9 +1118,9 @@ namespace Quad64
 
 					if (camera.isOrbitCamera())
 						camera.updateOrbitCamera(ref camMtx);
-					glControl1.Invalidate();
+					// glControl1.Invalidate();
 					propertyGrid1.Refresh();
-					glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
+					// glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
 					Globals.needToSave = true;
 				}
 			}
@@ -1141,9 +1143,9 @@ namespace Quad64
 				obj.yPos = level.getCurrentArea().collision.dropToGround(new Vector3(obj.xPos, obj.yPos, obj.zPos));
 				if (camera.isOrbitCamera())
 					camera.updateOrbitCamera(ref camMtx);
-				glControl1.Invalidate();
+				// glControl1.Invalidate();
 				propertyGrid1.Refresh();
-				glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
+				// glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
 				Globals.needToSave = true;
 			}
 		}
@@ -1204,9 +1206,9 @@ namespace Quad64
 					}
 					if (camera.isOrbitCamera())
 						camera.updateOrbitCamera(ref camMtx);
-					glControl1.Invalidate();
+					// glControl1.Invalidate();
 					propertyGrid1.Refresh();
-					glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
+					// glControl1.Update(); // Needed after calling propertyGrid1.Refresh();
 					rotObj_Yaw_lastMouseY = e.Y;
 					Globals.needToSave = true;
 				}
