@@ -54,6 +54,7 @@ namespace Quad64
 			// OpenTK.Toolkit.Init();
 
 			SDL.SDL_Init(SDL.SDL_INIT_VIDEO);
+			SDL.SDL_SetHint("SDL_MOUSE_FOCUS_CLICKTHROUGH", "1");
 			gameWindow = SDL.SDL_CreateWindow(
 				string.Empty,
 				0,
@@ -306,6 +307,9 @@ namespace Quad64
 
 		private void glControl1_MouseDown(SDL.SDL_MouseButtonEvent e)
 		{
+			// HACK: Refocus parent window to make everything seem seamless.
+			Focus();
+
 			isMouseDown = true;
 			savedCamPos = camera.Position;
 			if (e.button == 1)
