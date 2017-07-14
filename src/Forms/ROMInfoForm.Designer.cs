@@ -1,6 +1,6 @@
 ﻿namespace Quad64
 {
-    partial class ROMInfoForm
+    public partial class ROMInfoForm
     {
         /// <summary>
         /// Required designer variable.

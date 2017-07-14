@@ -1,6 +1,6 @@
-﻿namespace Quad64.src.Forms
+﻿namespace Quad64.Forms
 {
-    partial class SelectComboPreset
+    public partial class SelectComboPreset
     {
         /// <summary>
         /// Required designer variable.

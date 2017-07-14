@@ -1,6 +1,6 @@
 ﻿namespace Quad64
 {
-    partial class SelectLevelForm
+    public partial class SelectLevelForm
     {
         /// <summary>
         /// Required designer variable.

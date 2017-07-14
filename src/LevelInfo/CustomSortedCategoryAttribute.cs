@@ -4,17 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace Quad64.src.LevelInfo
+namespace Quad64.LevelInfo
 {
-    public class CustomSortedCategoryAttribute : CategoryAttribute
-    {
-        private const char NonPrintableChar = '\t';
+	public class CustomSortedCategoryAttribute : CategoryAttribute
+	{
+		private const char NonPrintableChar = '\t';
 
-        public CustomSortedCategoryAttribute(string category,
-                                                ushort categoryPos,
-                                                ushort totalCategories)
-            : base(category.PadLeft(category.Length + (totalCategories - categoryPos), NonPrintableChar))
-        {
-        }
-    }
+		public CustomSortedCategoryAttribute(string category,
+												ushort categoryPos,
+												ushort totalCategories)
+			: base(category.PadLeft(category.Length + (totalCategories - categoryPos), NonPrintableChar))
+		{
+		}
+	}
 }

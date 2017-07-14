@@ -1,4 +1,4 @@
-﻿namespace Quad64.src.Forms
+﻿namespace Quad64.Forms
 {
     partial class SettingsForm
     {

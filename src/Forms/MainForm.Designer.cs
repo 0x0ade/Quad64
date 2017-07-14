@@ -1,6 +1,6 @@
 ﻿namespace Quad64
 {
-    partial class MainForm
+    public partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -95,7 +95,7 @@
             this.moveObjectLabel = new System.Windows.Forms.Label();
             this.moveObj = new System.Windows.Forms.PictureBox();
             this.movObj_UpDown = new System.Windows.Forms.PictureBox();
-            this.glControl1 = new OpenTK.GLControl();
+            this.glControl1 = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -918,8 +918,6 @@
             this.glControl1.Size = new System.Drawing.Size(649, 365);
             this.glControl1.TabIndex = 0;
             this.glControl1.TabStop = false;
-            this.glControl1.VSync = false;
-            this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
             this.glControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl1_Paint);
             this.glControl1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyDown);
             this.glControl1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.glControl1_KeyUp);
@@ -1004,7 +1002,7 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.PictureBox movObj_UpDown;
         private System.Windows.Forms.PictureBox moveObj;
-        private OpenTK.GLControl glControl1;
+        private System.Windows.Forms.Panel glControl1;
         private System.Windows.Forms.Panel moveObjectPanel;
         private System.Windows.Forms.Label moveObjectLabel;
         private System.Windows.Forms.Panel moveCamPanel;

@@ -17,12 +17,12 @@ You can use <a href="http://origami64.net/showthread.php?tid=97">queueRAM's sm64
 
 # Required Libraries
 
-## OpenTK
+## SDL2-CS, MiniTK, SDL2
 Required for the 3D Viewer window.
 
-https://www.nuget.org/packages/OpenTK/
-<br/>
-https://www.nuget.org/packages/OpenTK.GLControl/
+https://github.com/flibitijibibo/SDL2-CS
+
+https://github.com/dan200/MiniTK
 
 ## JSON.NET
 Required for reading/writing JSON files.
