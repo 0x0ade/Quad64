@@ -15,6 +15,7 @@ using System.IO;
 using Quad64.TestROM;
 using Quad64.Forms;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Quad64
 {
@@ -26,10 +27,11 @@ namespace Quad64
 		Vector3 savedCamPos = new Vector3();
 		Matrix4 camMtx = Matrix4.Identity;
 		Matrix4 ProjMatrix;
-		bool isMouseDown = false, isShiftDown = false, moveState = false;
+		bool isMouseDown = false, isLMBDown = false, isShiftDown = false, moveState = false;
 		static Level level;
 		float FOV = 1.048f;
 
+		private Thread gameThread;
 		private IntPtr gameWindow;
 		private IntPtr glContext;
 
@@ -53,11 +55,11 @@ namespace Quad64
 
 			SDL.SDL_Init(SDL.SDL_INIT_VIDEO);
 			gameWindow = SDL.SDL_CreateWindow(
-				String.Empty,
+				string.Empty,
 				0,
 				0,
-				glControl1.Size.Width,
-				glControl1.Size.Height,
+				glControl1.Width,
+				glControl1.Height,
 				SDL.SDL_WindowFlags.SDL_WINDOW_BORDERLESS | SDL.SDL_WindowFlags.SDL_WINDOW_OPENGL
 			);
 
@@ -89,10 +91,15 @@ namespace Quad64
 			SetParent(winHandle, glControl1.Handle);
 			ShowWindow(winHandle, 1); // SHOWNORMAL
 
+			// Let's just fake glControl1_Load... What can go wrong?
+			glControl1_Load(null, null);
+
+			gameThread = new Thread(gameLoop);
+			gameThread.IsBackground = true;
+			gameThread.Start();
+
 			SettingsFile.LoadGlobalSettings("default");
-			glControl1.MouseWheel += new MouseEventHandler(glControl1_Wheel);
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
-			glControl1.Enabled = false;
 			KeyPreview = true;
 			treeView1.HideSelection = false;
 			camera.updateMatrix(ref camMtx);
@@ -113,6 +120,14 @@ namespace Quad64
 		private static extern IntPtr SetParent(IntPtr child, IntPtr newParent);
 		[DllImport("user32.dll")]
 		private static extern IntPtr ShowWindow(IntPtr handle, int command);
+
+		private void gameLoop()
+		{
+			while (!IsDisposed)
+			{
+				Invoke((Action) glControl1_Paint);
+			}
+		}
 
 		private void loadROM(bool startingUp)
 		{
@@ -202,7 +217,7 @@ namespace Quad64
 			}
 		}
 
-		private void glControl1_Paint(object sender, PaintEventArgs e)
+		private void glControl1_Paint()
 		{
 			GL.ClearColor(bgColor);
 			if (level != null)
@@ -217,6 +232,24 @@ namespace Quad64
 				level.getCurrentArea().drawEverything();
 
 				SDL.SDL_GL_SwapWindow(gameWindow);
+
+				// Forward SDL events.
+				SDL.SDL_Event e;
+				while (SDL.SDL_PollEvent(out e) != 0)
+				{
+					if (e.type == SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN)
+						glControl1_MouseDown(e.button);
+					else if (e.type == SDL.SDL_EventType.SDL_MOUSEBUTTONUP)
+						glControl1_MouseUp(e.button);
+					else if (e.type == SDL.SDL_EventType.SDL_MOUSEMOTION)
+						glControl1_MouseMove(e.motion);
+					else if (e.type == SDL.SDL_EventType.SDL_MOUSEWHEEL)
+						glControl1_Wheel(e.wheel);
+					else if (e.type == SDL.SDL_EventType.SDL_KEYDOWN)
+						glControl1_KeyDown(e.key);
+					else if (e.type == SDL.SDL_EventType.SDL_KEYUP)
+						glControl1_KeyUp(e.key);
+				}
 			}
 		}
 
@@ -271,72 +304,77 @@ namespace Quad64
 			//Console.WriteLine("Picking Done");
 		}
 
-		private void glControl1_MouseDown(object sender, MouseEventArgs e)
+		private void glControl1_MouseDown(SDL.SDL_MouseButtonEvent e)
 		{
 			isMouseDown = true;
 			savedCamPos = camera.Position;
-			if (e.Button == MouseButtons.Right)
+			if (e.button == 1)
+				isLMBDown = true;
+			if (e.button == 3)
 			{
-				selectObject(e.X, e.Y);
+				selectObject(e.x, e.y);
 				glControl1.Invalidate();
 			}
 		}
 
-		private void glControl1_MouseUp(object sender, MouseEventArgs e)
+		private void glControl1_MouseUp(SDL.SDL_MouseButtonEvent e)
 		{
 			camera.resetMouseStuff();
 			isMouseDown = false;
+			if (e.button == 1)
+				isLMBDown = false;
 			if (!isShiftDown)
 				moveState = false;
 		}
 
-		private void glControl1_MouseLeave(object sender, EventArgs e)
+		// FIXME: [SDL2PORT] Hook glControl1_MouseLeave onto something!
+		private void glControl1_MouseLeave(SDL.SDL_Event e)
 		{
 			camera.resetMouseStuff();
 			isMouseDown = false;
 		}
 
-		private void glControl1_MouseMove(object sender, MouseEventArgs e)
+		private void glControl1_MouseMove(SDL.SDL_MouseMotionEvent e)
 		{
-			if (isMouseDown && e.Button == MouseButtons.Left)
+			if (isMouseDown && isLMBDown)
 			{
 				if (!isShiftDown && !moveState)
 				{
-					camera.updateCameraMatrixWithMouse(e.X, e.Y, ref camMtx);
+					camera.updateCameraMatrixWithMouse(e.x, e.y, ref camMtx);
 				}
 				else
 				{
 					moveState = true;
-					camera.updateCameraOffsetWithMouse(savedCamPos, e.X, e.Y, glControl1.Width, glControl1.Height, ref camMtx);
+					camera.updateCameraOffsetWithMouse(savedCamPos, e.x, e.y, glControl1.Width, glControl1.Height, ref camMtx);
 				}
 				glControl1.Invalidate();
 			}
 		}
 
-		private void glControl1_Wheel(object sender, MouseEventArgs e)
+		private void glControl1_Wheel(SDL.SDL_MouseWheelEvent e)
 		{
 			camera.resetMouseStuff();
-			camera.updateCameraMatrixWithScrollWheel((int) (e.Delta * 1.5f), ref camMtx);
+			camera.updateCameraMatrixWithScrollWheel((int) (e.y * 120 * 1.5f), ref camMtx);
 			savedCamPos = camera.Position;
 			glControl1.Invalidate();
 		}
 
-		private void glControl1_KeyUp(object sender, KeyEventArgs e)
+		private void glControl1_KeyUp(SDL.SDL_KeyboardEvent e)
 		{
-			isShiftDown = e.Shift;
+			if (e.keysym.sym == SDL.SDL_Keycode.SDLK_LSHIFT || e.keysym.sym == SDL.SDL_Keycode.SDLK_RSHIFT)
+				isShiftDown = true;
 			if (!isMouseDown)
 				moveState = false;
 		}
 
-		private void glControl1_KeyDown(object sender, KeyEventArgs e)
+		private void glControl1_KeyDown(SDL.SDL_KeyboardEvent e)
 		{
-			isShiftDown = e.Shift;
+			if (e.keysym.sym == SDL.SDL_Keycode.SDLK_LSHIFT || e.keysym.sym == SDL.SDL_Keycode.SDLK_RSHIFT)
+				isShiftDown = false;
 		}
 
 		private void glControl1_Load(object sender, EventArgs e)
 		{
-			// FIXME: [SDL2PORT] Invoke _Load.
-
 			GL.Enable(EnableCap.Blend);
 			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
@@ -355,8 +393,7 @@ namespace Quad64
 
 		private void glControl1_Resize(object sender, EventArgs e)
 		{
-			// FIXME: [SDL2PORT] Resize SDL2 slave.
-			// glControl1.Context.Update(glControl1.WindowInfo);
+			SDL.SDL_SetWindowSize(gameWindow, glControl1.Width, glControl1.Height);
 			GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
 			glControl1.Invalidate();
