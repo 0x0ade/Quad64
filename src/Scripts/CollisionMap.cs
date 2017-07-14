@@ -114,7 +114,7 @@ namespace Quad64.Scripts
 					temp.a = new Vector3(vertices[(int) list.indices[j + 0]]);
 					temp.b = new Vector3(vertices[(int) list.indices[j + 1]]);
 					temp.c = new Vector3(vertices[(int) list.indices[j + 2]]);
-					if (PointInTriangle(pos.Xz, temp.a.Xz, temp.b.Xz, temp.c.Xz))
+					if (PointInTriangle(pos.Xz(), temp.a.Xz(), temp.b.Xz(), temp.c.Xz()))
 					{
 						found.Add(barryCentric(temp.a, temp.b, temp.c, pos));
 					}

@@ -108,5 +108,8 @@ namespace Quad64
 			// Add new entry if it doesn't exist
 			objectComboEntries.Add(newEntry);
 		}
+
+		public static Vector2 Xz(this Vector3 v)
+			=> new Vector2(v.X, v.Z);
 	}
 }

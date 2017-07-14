@@ -117,6 +117,8 @@ namespace Quad64
 			int cy,
 			uint flags
 		);
+		[DllImport("User32.dll")]
+		private static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
 		[DllImport("user32.dll")]
 		private static extern IntPtr SetParent(IntPtr child, IntPtr newParent);
 		[DllImport("user32.dll")]
@@ -397,11 +399,9 @@ namespace Quad64
 
 		private void glControl1_Resize(object sender, EventArgs e)
 		{
-			/*
 			SDL.SDL_SetWindowSize(gameWindow, glControl1.Width, glControl1.Height);
 			GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
-			*/
 			// glControl1.Invalidate();
 		}
 
