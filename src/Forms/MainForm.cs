@@ -76,11 +76,11 @@ namespace Quad64
 			// Get the Win32 HWND from the SDL2 window
 			SDL.SDL_SysWMinfo info = new SDL.SDL_SysWMinfo();
 			SDL.SDL_GetWindowWMInfo(gameWindow, ref info);
-            gameWindowHwnd = info.info.win.window;
+			gameWindowHwnd = info.info.win.window;
 
 			// Move the SDL2 window to 0, 0
 			SetWindowPos(
-                gameWindowHwnd,
+				gameWindowHwnd,
 				Handle,
 				0,
 				0,
@@ -402,17 +402,17 @@ namespace Quad64
 		{
 			SDL.SDL_SetWindowSize(gameWindow, glControl1.Width, glControl1.Height);
 
-            SetWindowPos(
-                gameWindowHwnd,
-                IntPtr.Zero,
-                0,
-                0,
-                glControl1.Width,
-                glControl1.Height,
-                0
-            );
+			SetWindowPos(
+				gameWindowHwnd,
+				IntPtr.Zero,
+				0,
+				0,
+				glControl1.Width,
+				glControl1.Height,
+				0
+			);
 
-            GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
+				GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
 			// glControl1.Invalidate();
 		}
@@ -824,9 +824,9 @@ namespace Quad64
 		}
 
 		/* 
-        Taken from: https://stackoverflow.com/a/21199864. This basically makes it 
-        so that the object name in the list will always stay highlighted.
-        */
+		Taken from: https://stackoverflow.com/a/21199864. This basically makes it 
+		so that the object name in the list will always stay highlighted.
+		*/
 		private void treeView1_DrawNode(object sender, DrawTreeNodeEventArgs e)
 		{
 			if (e.Node == null) return;
