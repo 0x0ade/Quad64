@@ -188,9 +188,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="images\MoveCamera.png" />
   </ItemGroup>
   <ItemGroup>

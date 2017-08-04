@@ -89,9 +89,11 @@ namespace Quad64
 				0x0401 // NOSIZE | SHOWWINDOW
 			);
 
-			// Attach the SDL2 window to the panel
-			SetParent(gameWindowHwnd, glControl1.Handle);
-			ShowWindow(gameWindowHwnd, 1); // SHOWNORMAL
+            // Attach the SDL2 window to the panel
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+                SetParent(gameWindowHwnd, glControl1.Handle);
+                ShowWindow(gameWindowHwnd, 1); // SHOWNORMAL
+            }
 
 			// Let's just fake glControl1_Load... What can go wrong?
 			glControl1_Load(null, null);
@@ -400,6 +402,9 @@ namespace Quad64
 
 		private void glControl1_Resize(object sender, EventArgs e)
 		{
+			if (gameWindow == IntPtr.Zero)
+				return;
+
 			SDL.SDL_SetWindowSize(gameWindow, glControl1.Width, glControl1.Height);
 
 			SetWindowPos(
@@ -412,7 +417,7 @@ namespace Quad64
 				0
 			);
 
-				GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
+			GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
 			// glControl1.Invalidate();
 		}
