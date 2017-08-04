@@ -33,6 +33,7 @@ namespace Quad64
 
 		private Thread gameThread;
 		private IntPtr gameWindow;
+		private IntPtr gameWindowHwnd;
 		private IntPtr glContext;
 
 		public Level getLevelData { get { return level; } }
@@ -75,11 +76,11 @@ namespace Quad64
 			// Get the Win32 HWND from the SDL2 window
 			SDL.SDL_SysWMinfo info = new SDL.SDL_SysWMinfo();
 			SDL.SDL_GetWindowWMInfo(gameWindow, ref info);
-			IntPtr winHandle = info.info.win.window;
+            gameWindowHwnd = info.info.win.window;
 
 			// Move the SDL2 window to 0, 0
 			SetWindowPos(
-				winHandle,
+                gameWindowHwnd,
 				Handle,
 				0,
 				0,
@@ -89,8 +90,8 @@ namespace Quad64
 			);
 
 			// Attach the SDL2 window to the panel
-			SetParent(winHandle, glControl1.Handle);
-			ShowWindow(winHandle, 1); // SHOWNORMAL
+			SetParent(gameWindowHwnd, glControl1.Handle);
+			ShowWindow(gameWindowHwnd, 1); // SHOWNORMAL
 
 			// Let's just fake glControl1_Load... What can go wrong?
 			glControl1_Load(null, null);
@@ -400,7 +401,18 @@ namespace Quad64
 		private void glControl1_Resize(object sender, EventArgs e)
 		{
 			SDL.SDL_SetWindowSize(gameWindow, glControl1.Width, glControl1.Height);
-			GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
+
+            SetWindowPos(
+                gameWindowHwnd,
+                IntPtr.Zero,
+                0,
+                0,
+                glControl1.Width,
+                glControl1.Height,
+                0
+            );
+
+            GL.Viewport(0, 0, glControl1.Width, glControl1.Height);
 			ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, (float) glControl1.Width / (float) glControl1.Height, 100f, 100000f);
 			// glControl1.Invalidate();
 		}

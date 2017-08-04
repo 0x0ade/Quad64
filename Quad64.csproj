@@ -53,7 +53,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>Quad64.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon_KtQ_icon.ico</ApplicationIcon>
